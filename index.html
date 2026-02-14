@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>How Much Do You Love Me? ❤️</title>
+
+<style>
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #ff758c, #ff7eb3);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  color: white;
+}
+
+.container {
+  margin-top: 100px;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 20px;
+  transition: 0.3s;
+}
+
+#yesBtn {
+  background-color: #28a745;
+  color: white;
+}
+
+#noBtn {
+  background-color: #dc3545;
+  color: white;
+}
+
+img {
+  width: 200px;
+  margin-top: 20px;
+}
+
+/* Heart falling animation */
+@keyframes fall {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Audio -->
+<audio id="happySound">
+  <source src="happy.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="main">
+  <h1>How much do you love me? 💖</h1>
+  <button id="yesBtn" onclick="yesClicked()">Yes ❤️</button>
+  <button id="noBtn" onclick="noClicked()">No 😢</button>
+</div>
+
+<script>
+
+let noCount = 0;
+let yesSize = 20;
+let heartRainStarted = false;
+
+function yesClicked() {
+
+  // Play sound safely
+  const sound = document.getElementById("happySound");
+  sound.currentTime = 0;
+  sound.play().catch(error => {
+    console.log("Autoplay blocked. User interaction required.");
+  });
+
+  document.body.innerHTML = `
+    <div class="container">
+      <h1>I LOVE YOU SOOOOOOOOOOOOOOO MUCH MERA BUBU ❤️🥰</h1>
+      <img src="happy.gif" alt="Happy">
+    </div>
+  `;
+
+  if (!heartRainStarted) {
+    heartRainStarted = true;
+    startHeartRain();
+  }
+}
+
+function noClicked() {
+  noCount++;
+  yesSize += 18;
+
+  if (noCount === 1) {
+    updateScreen("Nahi Karti 😢", "sad1.jpeg");
+  } 
+  else if (noCount === 2) {
+    updateScreen("Sach Me Nahi Karti 😭", "sad2.jpg");
+  } 
+  else if (noCount === 3) {
+    updateScreen("Nooooooooooooooo 💔", "sad3.jpeg");
+  } 
+  else {
+    finalMoveNo();
+  }
+}
+
+function updateScreen(noText, imgSrc) {
+  document.getElementById("main").innerHTML = `
+    <h1>Please don't do this 🥺</h1>
+    <button id="yesBtn" onclick="yesClicked()" 
+      style="font-size:${yesSize}px;">YES ❤️</button>
+    <button id="noBtn" onclick="noClicked()">${noText}</button>
+    <br>
+    <img src="${imgSrc}" alt="Sad">
+  `;
+}
+
+function finalMoveNo() {
+  document.getElementById("main").innerHTML = `
+    <h1>Pleasessssssss 😭</h1>
+    <button id="yesBtn" onclick="yesClicked()" 
+      style="font-size:${yesSize}px;">YES ❤️</button>
+    <button id="noBtn" onmouseover="moveNo()">Nahi 😔</button>
+    <br>
+    <img src="sad3.jpeg" alt="Very Sad">
+  `;
+}
+
+function moveNo() {
+  const btn = document.getElementById("noBtn");
+  btn.style.position = "absolute";
+  btn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  btn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+}
+
+function startHeartRain() {
+  setInterval(function() {
+    const heart = document.createElement("div");
+    heart.innerHTML = "❤️";
+    heart.style.position = "fixed";
+    heart.style.top = "-30px";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (Math.random() * 25 + 20) + "px";
+    heart.style.animation = "fall 5s linear";
+    heart.style.zIndex = "999";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  }, 150);
+}
+
+</script>
+
+</body>
+</html>
